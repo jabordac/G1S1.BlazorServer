@@ -1,0 +1,42 @@
+﻿@page "/"
+
+@using Data
+
+@inject ISnackbar snackBar
+
+@if (Users == null)
+{
+    <h1>Loading...</h1>
+}
+else
+{
+    @foreach (var user in Users)
+    {
+        <MudText Typo="Typo.h1">Hello, @user.Name</MudText>
+        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => OnClick(user.Name))">Despedida</MudButton>
+    }
+}
+
+@code {
+    private List<Users> Users { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await Task.Delay(5000);
+        Users = GetUsers();
+    }
+
+    private List<Users> GetUsers()
+    {
+        return new List<Users>() {
+            new Users { Id = 1, Name = "Jorge" },
+            new Users { Id = 2, Name = "Andrea" }
+        };
+    }
+
+    private void OnClick(string name)
+    {
+        snackBar.Add($"Hasta pronto {name}");
+    }
+}

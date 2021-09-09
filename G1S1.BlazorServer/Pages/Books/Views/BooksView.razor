@@ -1,0 +1,22 @@
+﻿@page "/Books"
+@page "/Books/{BookId:int}/{BookName}"
+
+@using G1S1.BlazorServer.Pages.Books.Components
+
+<p>Libro: @BookId - @BookName</p>
+
+<PageComponent @ref="btnAceptar" Id="1" Title="Introduccion" Content="Blazor sin fronteras" OnPagePrintClick="test" >
+
+</PageComponent>
+
+@code {
+    [Parameter] public int BookId { get; set; }
+    [Parameter] public string BookName { get; set; }
+    PageComponent btnAceptar;
+
+    private void test()
+    {
+        
+    }
+
+}
