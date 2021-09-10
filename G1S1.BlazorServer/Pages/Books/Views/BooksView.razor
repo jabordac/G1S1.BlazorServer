@@ -1,22 +1,43 @@
 ﻿@page "/Books"
 @page "/Books/{BookId:int}/{BookName}"
 
+@inject ISnackbar snackBar;
+@layout CenteredLayout
+
 @using G1S1.BlazorServer.Pages.Books.Components
 
 <p>Libro: @BookId - @BookName</p>
 
-<PageComponent @ref="btnAceptar" Id="1" Title="Introduccion" Content="Blazor sin fronteras" OnPagePrintClick="test" >
+<CascadingValue Name="BookName" Value="@BookName">
+    <PageComponent @ref="Page1" Id="1" OnPagePrintClick="OnPagePrintClick">
+        <ContentFragment>
+            Blazor sin fronteras
+        </ContentFragment>
+    </PageComponent>
 
-</PageComponent>
+    <PageComponent Id="2" OnPagePrintClick="OnPagePrintClick">
+        <TitleFragment>
+            <MudText Color="Color.Primary">Indice</MudText>
+        </TitleFragment>
+        <ContentFragment>
+            Contenido
+        </ContentFragment>
+    </PageComponent>
+</CascadingValue>
 
 @code {
     [Parameter] public int BookId { get; set; }
     [Parameter] public string BookName { get; set; }
-    PageComponent btnAceptar;
 
-    private void test()
+    PageComponent Page1;
+
+    protected override async Task OnInitializedAsync()
     {
         
     }
 
+    private void OnPagePrintClick(int Id)
+    {
+        snackBar.Add($"{BookName} | Impresión página: {Id}");
+    }
 }

@@ -1,8 +1,10 @@
 ﻿@page "/"
 
 @using Data
+@using G1S1.BlazorServer.Pages.Books.Views;
 
 @inject ISnackbar snackBar
+@inject NavigationManager navigationManager
 
 @if (Users == null)
 {
@@ -12,13 +14,15 @@ else
 {
     @foreach (var user in Users)
     {
-        <MudText Typo="Typo.h1">Hello, @user.Name</MudText>
+        <MudText Typo="Typo.h6">Hello, @user.Name</MudText>
         <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => OnClick(user.Name))">Despedida</MudButton>
     }
 }
 
+<MudButton Variant="Variant.Filled" Color="Color.Secondary" Link="/Books">Go to Books</MudButton>
+
 @code {
-    private List<Users> Users { get; set; }
+    private List<User> Users { get; set; }
 
 
     protected override async Task OnInitializedAsync()
@@ -27,16 +31,17 @@ else
         Users = GetUsers();
     }
 
-    private List<Users> GetUsers()
+    private List<User> GetUsers()
     {
-        return new List<Users>() {
-            new Users { Id = 1, Name = "Jorge" },
-            new Users { Id = 2, Name = "Andrea" }
+        return new List<User>() {
+            new User { Id = 1, Name = "Jorge" },
+            new User { Id = 2, Name = "Andrea" }
         };
     }
 
     private void OnClick(string name)
     {
+        navigationManager.NavigateTo("/Books/1/Prueba");
         snackBar.Add($"Hasta pronto {name}");
     }
 }

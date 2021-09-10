@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace G1S1.BlazorServer.Data
 {
-    public class Users
+    public class Page
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int PageId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
     }
 }
