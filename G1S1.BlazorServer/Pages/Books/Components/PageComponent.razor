@@ -1,5 +1,9 @@
-﻿<MudPaper Class="pa-16 ma-2" Elevation="3">
-    <MudText Typo="Typo.h4">@BookName</MudText>
+﻿@namespace G1S1.BlazorServer.Pages
+
+@using G1S1.BlazorServer.Data
+
+<MudPaper Class="pa-16 ma-2" Elevation="3">
+    <MudText Typo="Typo.h4">@Book.BookId | @Book.Name</MudText>
 
     <MudText Typo="Typo.h5">Page: @Id</MudText>
 
@@ -18,7 +22,7 @@
 </MudPaper>
 
 @code {
-    [CascadingParameter(Name = "BookName")] public string BookName { get; set; }
+    [CascadingParameter(Name = "Parameter1")] public Book Book { get; set; }
 
     [Parameter] public int Id { get; set; }
     [Parameter] public EventCallback<int> OnPagePrintClick { get; set; }

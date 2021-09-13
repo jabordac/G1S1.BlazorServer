@@ -1,3 +1,4 @@
+using G1S1.BlazorServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +27,8 @@ namespace G1S1.BlazorServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IBookService, BookService>();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddMudServices();

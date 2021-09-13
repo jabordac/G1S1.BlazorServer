@@ -1,0 +1,62 @@
+﻿@if (Book != null)
+{
+    <EditForm Model="@Book" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+        @*<FluentValidationValidator></FluentValidationValidator>*@
+        <MudDialog ClassActions="mt-1 mb-3 mr-4">
+            <TitleContent>
+                <MudText Typo="Typo.h5" Class="d-flex justify-center"><b>@title</b></MudText>
+                <MudText Typo="Typo.subtitle1" Class="d-flex justify-center">@subtitle</MudText>
+            </TitleContent>
+            <DialogContent>
+                <MudGrid Spacing="3">
+                    <MudItem xs="12" sm="12" md="10">
+                        <MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
+                            <MudGrid Spacing="2">
+                                <MudItem xs="12" sm="12" md="3">
+                                    <MudTextField Label="Id" @bind-Value="Book.BookId" Variant="Variant.Outlined" Margin="Margin.Dense" Disabled="@isDisabled" />
+                                    <ValidationMessage For="@(() => Book.BookId)" />
+                                </MudItem>
+
+                                <MudItem xs="12" sm="12" md="9">
+                                    <MudTextField Label="Nombre" @bind-Value="Book.Name" Variant="Variant.Outlined" Margin="Margin.Dense" Disabled="@isDisabled" />
+                                    <ValidationMessage For="@(() => Book.Name)" />
+                                </MudItem>
+
+                                @*<MudItem xs="12" sm="12" md="4">
+                                        <MudSelect Label="Tipo de Identificación" T="long" Strict="true" @bind-Value="@Comercio.IdTipoIdentificacion"
+                                                   Dense="true" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
+                                            @foreach (var item in tiposIdentificacion)
+                                            {
+                                                <MudSelectItem Value="@item.IdLista">@item.Descripcion</MudSelectItem>
+                                            }
+                                        </MudSelect>
+                                        <ValidationMessage For="@(() => Comercio.IdTipoIdentificacion)" />
+                                    </MudItem>*@
+
+                                @*<MudAutocomplete Label="País" T="long" SearchFunc="@SearchPaises" Value="Comercio.IdPais" ValueChanged="@(args => OnChangedPais(args, true))" Clearable="true"
+                                                     Immediate="true" CoerceValue="false" ResetValueOnEmptyText="true" Variant="Variant.Outlined"
+                                                     AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" Dense="true"
+                                                     ToStringFunc="@(i => paises.FirstOrDefault(b => b.IdLocalizacion == i)?.Nombre ?? string.Empty)" />
+                                    <ValidationMessage For="@(() => Comercio.IdPais)" />*@
+                            </MudGrid>
+                        </MudFocusTrap>
+                    </MudItem>
+                </MudGrid>
+
+                <MudDivider DividerType="DividerType.FullWidth" Class="mt-6" />
+            </DialogContent>
+            <DialogActions>
+                @if (!isDisabled)
+                {
+                    <MudButton Variant="Variant.Outlined" Color="Color.Default" ButtonType="ButtonType.Button" OnClick="OnCancel" Disabled="@(isLoading)">
+                        Cancelar
+                    </MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Success" ButtonType="ButtonType.Submit" DisableElevation="true" Disabled="@(isLoading)">
+                        Guardar
+                    </MudButton>
+                }
+            </DialogActions>
+        </MudDialog>
+    </EditForm>
+}
