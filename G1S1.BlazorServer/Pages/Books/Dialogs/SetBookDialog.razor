@@ -1,48 +1,70 @@
-﻿@if (Book != null)
+﻿
+
+@if (Book != null)
 {
     <EditForm Model="@Book" OnValidSubmit="OnValidSubmit">
-        <DataAnnotationsValidator />
-        @*<FluentValidationValidator></FluentValidationValidator>*@
+        <FluentValidationValidator></FluentValidationValidator>
+
         <MudDialog ClassActions="mt-1 mb-3 mr-4">
             <TitleContent>
                 <MudText Typo="Typo.h5" Class="d-flex justify-center"><b>@title</b></MudText>
                 <MudText Typo="Typo.subtitle1" Class="d-flex justify-center">@subtitle</MudText>
             </TitleContent>
             <DialogContent>
-                <MudGrid Spacing="3">
-                    <MudItem xs="12" sm="12" md="10">
-                        <MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
-                            <MudGrid Spacing="2">
-                                <MudItem xs="12" sm="12" md="3">
-                                    <MudTextField Label="Id" @bind-Value="Book.BookId" Variant="Variant.Outlined" Margin="Margin.Dense" Disabled="@isDisabled" />
-                                    <ValidationMessage For="@(() => Book.BookId)" />
-                                </MudItem>
+                <MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
+                    <MudGrid Spacing="2">
+                        <MudItem xs="12" sm="12" md="8">
+                            <MudTextField Label="Nombre" @bind-Value="Book.Name" Variant="Variant.Text" Margin="Margin.Dense" Disabled="@isDisabled" />
+                            <ValidationMessage For="@(() => Book.Name)" />
+                        </MudItem>
 
-                                <MudItem xs="12" sm="12" md="9">
-                                    <MudTextField Label="Nombre" @bind-Value="Book.Name" Variant="Variant.Outlined" Margin="Margin.Dense" Disabled="@isDisabled" />
-                                    <ValidationMessage For="@(() => Book.Name)" />
-                                </MudItem>
+                        <MudItem xs="12" sm="12" md="4">
+                            <MudAutocomplete Label="Autores" T="Guid" SearchFunc="@SearchAuthors" Value="Book.AuthorId" ValueChanged="@OnChangedAuthor" Clearable="true" Disabled="@isDisabled"
+                                             Immediate="true" CoerceValue="false" ResetValueOnEmptyText="true" Variant="Variant.Text"
+                                             AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" Dense="true"
+                                             ToStringFunc="@(i => Authors.FirstOrDefault(b => b.AuthorId == i)?.Name ?? string.Empty)" />
+                            <ValidationMessage For="@(() => Book.AuthorId)" />
+                        </MudItem>
 
-                                @*<MudItem xs="12" sm="12" md="4">
-                                        <MudSelect Label="Tipo de Identificación" T="long" Strict="true" @bind-Value="@Comercio.IdTipoIdentificacion"
-                                                   Dense="true" Variant="Variant.Outlined" Margin="Margin.Dense" OffsetY="true">
-                                            @foreach (var item in tiposIdentificacion)
-                                            {
-                                                <MudSelectItem Value="@item.IdLista">@item.Descripcion</MudSelectItem>
-                                            }
-                                        </MudSelect>
-                                        <ValidationMessage For="@(() => Comercio.IdTipoIdentificacion)" />
-                                    </MudItem>*@
+                        <MudSelect Label="Autores" T="Guid" Strict="true" Value="@Book.AuthorId" MultiSelection="true"
+                            Dense="true" Variant="Variant.Text" Margin="Margin.Dense" OffsetY="true"
+                            SelectedValuesChanged="OnSelectedValuesChanged">
+                            @foreach (var item in Authors)
+                            {
+                                <MudSelectItem Value="@item.AuthorId">@item.Name</MudSelectItem>
+                            }
+                        </MudSelect>
 
-                                @*<MudAutocomplete Label="País" T="long" SearchFunc="@SearchPaises" Value="Comercio.IdPais" ValueChanged="@(args => OnChangedPais(args, true))" Clearable="true"
-                                                     Immediate="true" CoerceValue="false" ResetValueOnEmptyText="true" Variant="Variant.Outlined"
-                                                     AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" Dense="true"
-                                                     ToStringFunc="@(i => paises.FirstOrDefault(b => b.IdLocalizacion == i)?.Nombre ?? string.Empty)" />
-                                    <ValidationMessage For="@(() => Comercio.IdPais)" />*@
-                            </MudGrid>
-                        </MudFocusTrap>
-                    </MudItem>
-                </MudGrid>
+                        <MudItem xs="12" sm="12" md="4">
+                            <MudDatePicker Label="Publicación" DateFormat="dd/MM/yyyy" @bind-Date="Book.PublishDate" Variant="Variant.Text" Margin="Margin.Dense" Disabled="@isDisabled" />
+                            <ValidationMessage For="@(() => Book.PublishDate)" />
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="6">
+                            <MudField Label="Género" Variant="Variant.Text" Margin="Margin.Dense" InnerPadding="false">
+                                <MudRadioGroup T="int">
+                                    <MudRadio Dense="true" Option="1">Technical</MudRadio>
+                                    <MudRadio Dense="true" Option="2">Mistery</MudRadio>
+                                    <MudRadio Dense="true" Option="3">Magical Realism</MudRadio>
+                                </MudRadioGroup>
+                            </MudField>
+                            <ValidationMessage For="@(() => Book.GenderId)" />
+                        </MudItem>
+
+                        <MudItem xs="0" sm="0" md="2">
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="2">
+                            <MudNumericField Label="Precio" Variant="Variant.Text" Margin="Margin.Dense" @bind-Value="Book.Price" Format="F2" HideSpinButtons="true" />
+                            <ValidationMessage For="@(() => Book.Price)" />
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="2">
+                            <MudNumericField Label="Páginas" Variant="Variant.Text" Margin="Margin.Dense" @bind-Value="Book.Pages" HideSpinButtons="true" />
+                            <ValidationMessage For="@(() => Book.Pages)" />
+                        </MudItem>
+                    </MudGrid>
+                </MudFocusTrap>
 
                 <MudDivider DividerType="DividerType.FullWidth" Class="mt-6" />
             </DialogContent>

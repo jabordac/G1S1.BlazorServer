@@ -1,4 +1,5 @@
 ﻿using G1S1.BlazorServer.Model;
+using G1S1.BlazorServer.Services;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System;
@@ -11,10 +12,13 @@ namespace G1S1.BlazorServer.Pages.Books.Dialogs
     public partial class SetBookDialog
     {
         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-        [Parameter] public int BookId { get; set; }
+        [Parameter] public Guid? BookId { get; set; }
         [Parameter] public string Action { get; set; }
+        [Inject] private IBookService bookService { get; set; }
+        [Inject] private IAuthorService authorService { get; set; }
 
         private Book Book { get; set; }
+        private List<Author> Authors { get; set; }
 
         private string title;
         private string subtitle;
@@ -35,7 +39,7 @@ namespace G1S1.BlazorServer.Pages.Books.Dialogs
 
             subtitle = Action switch
             {
-                "ADD" => "Para crear una Libro debes completar los campos.",
+                "ADD" => "Para crear un Libro debes completar los campos.",
                 "EDIT" => "Para modificar un Libro debes actualizar los campos requeridos.",
                 _ => subtitle
             };
@@ -50,6 +54,8 @@ namespace G1S1.BlazorServer.Pages.Books.Dialogs
             }
 
             isDisabled = (Action == "VIEW");
+
+            Authors = await GetAuthors();
 
             isLoading = false;
         }
@@ -83,26 +89,41 @@ namespace G1S1.BlazorServer.Pages.Books.Dialogs
             isLoading = false;
         }
 
+        private void OnSelectedValuesChanged(HashSet<Guid> authors)
+        {
+            string listAuthors = string.Join(",", authors.Select(x => x.ToString()).ToArray());
+        }
+
         #endregion
 
         #region Métodos para Obtener Datos
 
         private async Task<Book> GetBook()
         {
-            //PeliculaResponse peliculaResponse = (await repositoryService.Get<IEnumerable<PeliculaResponse>>($"api/peliculas/{IdPelicula}/null")).LastOrDefault();
-
-            //PeliculaRequest peliculaRequest = new PeliculaRequest
-            //{
-            //    IdPelicula = peliculaResponse.IdPelicula,
-            //    Codigo = peliculaResponse.Codigo,
-            //    Nombre = peliculaResponse.Nombre,
-            //    Descripcion = peliculaResponse.Descripcion,
-            //    Imagen = peliculaResponse.Imagen,
-            //};
-
-            return Book;
+            return (await bookService.GetById(BookId.GetValueOrDefault()));
         }
 
+        private async Task<List<Author>> GetAuthors()
+        {
+            return (await authorService.GetAll());
+        }
+
+        private async Task<IEnumerable<Guid>> SearchAuthors(string value)
+        {
+            //await Task.Delay(5);
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return Authors.Select(x => x.AuthorId);
+            }
+
+            return Authors.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.AuthorId);
+        }
+
+        private async Task OnChangedAuthor(Guid value)
+        {
+            Book.AuthorId = value;
+        }
         #endregion
 
     }

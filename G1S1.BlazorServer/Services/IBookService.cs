@@ -9,5 +9,7 @@ namespace G1S1.BlazorServer.Services
     public interface IBookService
     {
         Task<List<Book>> GetAll();
+        Task<Book> GetById(Guid bookId);
+        Task<Guid> Set(Book book);
     }
 }

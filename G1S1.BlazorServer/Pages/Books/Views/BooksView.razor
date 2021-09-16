@@ -61,14 +61,14 @@
         <MudTd>@context.Price</MudTd>
         <MudTd>@context.PublishDate</MudTd>
         <MudTd Class="text-center">
-            <MudSwitch T="bool" Checked=@(context.State) CheckedChanged="@(args => OnDeleteBook(context.BookId))" Color="Color.Info" />
+            <MudSwitch T="bool" Checked=@(context.State) CheckedChanged="@(args => OnDeleteBook(context.BookId.GetValueOrDefault()))" Color="Color.Info" />
         </MudTd>
         <MudTd Class="text-center">
             <MudMenu Icon="@Icons.Material.Filled.MoreHoriz" Size="Size.Medium" OffsetX="false" OffsetY="true" Dense="true"
                      Direction="Direction.Right" DisableRipple="true">
-                <MudMenuItem OnClick="@(args => OnViewBook(context.BookId))">Ver</MudMenuItem>
-                <MudMenuItem OnClick="@(args => OnEditBook(context.BookId))">Editar</MudMenuItem>
-                @*<MudMenuItem OnClick="@(args => OnDeletePelicula(context.IdPelicula))">Eliminar</MudMenuItem>*@
+                <MudMenuItem OnClick="@(args => OnViewBook(context.BookId.GetValueOrDefault()))">Ver</MudMenuItem>
+                <MudMenuItem OnClick="@(args => OnEditBook(context.BookId.GetValueOrDefault()))">Editar</MudMenuItem>
+                <MudMenuItem OnClick="@(args => OnDeleteBook(context.BookId.GetValueOrDefault()))">Eliminar</MudMenuItem>
             </MudMenu>
         </MudTd>
     </RowTemplate>

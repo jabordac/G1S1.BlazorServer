@@ -1,16 +1,13 @@
+using FluentValidation;
+using G1S1.BlazorServer.Model;
+using G1S1.BlazorServer.Model.Validators;
 using G1S1.BlazorServer.Services;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace G1S1.BlazorServer
 {
@@ -27,7 +24,10 @@ namespace G1S1.BlazorServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IBookService, BookService>();
+            services.AddSingleton<IBookService, BookService>();
+            services.AddSingleton<IAuthorService, AuthorService>();
+
+            //services.AddTransient<IValidator<Book>, BookValidator>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

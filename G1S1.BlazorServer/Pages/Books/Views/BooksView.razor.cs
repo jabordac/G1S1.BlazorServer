@@ -8,11 +8,14 @@ using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.JSInterop;
+using G1S1.BlazorServer.Helpers;
 
 namespace G1S1.BlazorServer.Pages.Books.Views
 {
     public partial class BooksView
     {
+        [Inject] private IJSRuntime jsRuntime { get; set; }
         [Inject] private ISnackbar snackBar { get; set; }
         [Inject] private IDialogService dialogService { get; set; }
         [Inject] private IBookService bookService { get; set; }
@@ -44,7 +47,7 @@ namespace G1S1.BlazorServer.Pages.Books.Views
             return false;
         }
 
-        private async Task ShowBookModal(int idBook, string accion)
+        private async Task ShowBookModal(Guid? idBook, string accion)
         {
             var parameters = new DialogParameters()
             {
@@ -74,59 +77,69 @@ namespace G1S1.BlazorServer.Pages.Books.Views
 
         private async Task OnAddBook()
         {
-            await ShowBookModal(0, "ADD");
+            await ShowBookModal(null, "ADD");
         }
 
-        private async Task OnEditBook(int BookId)
+        private async Task OnEditBook(Guid BookId)
         {
-            //await ShowBookModal(idPelicula, "EDIT");
+            await ShowBookModal(BookId, "EDIT");
         }
 
-        private async Task OnViewBook(int BookId)
+        private async Task OnViewBook(Guid BookId)
         {
-            //await ShowPeliculaModal(idPelicula, "VIEW");
+            await ShowBookModal(BookId, "VIEW");
         }
 
-        private async Task OnDeleteBook(int BookId)
+        [JSInvokable]
+        public async Task DisplayMessage()
         {
-            //var parameters = new DialogParameters()
+            snackBar.Add("Hola desde JS a C#");
+        }
+
+
+        private async Task OnDeleteBook(Guid BookId)
+        {
+            //await jsRuntime.InvokeVoidAsync("DisplayMessageJSToCS", DotNetObjectReference.Create(this));
+
+            //bool response = await jsRuntime.DisplayMessageCSToJS("Hola desde JS");
+
+            //if(response)
             //{
-            //    { nameof(MessageBox.Style), MessageBox.DialogStyle.Question },
-            //    { nameof(MessageBox.Title), "Eliminar Película" },
-            //    { nameof(MessageBox.Subtitle1), "¿Confirma la eliminación del registro seleccionado?" },
-            //    { nameof(MessageBox.Subtitle2), null },
-            //    { nameof(MessageBox.YesText), "Si" },
-            //    { nameof(MessageBox.NoText), "No" },
-            //    { nameof(MessageBox.CancelText), null },
-            //};
-
-            //var options = new DialogOptions
-            //{
-            //    CloseButton = false,
-            //    MaxWidth = MaxWidth.Small,
-            //    DisableBackdropClick = true
-            //};
-
-            //var dialog = dialogService.Show<MessageBox>("Iniciando...", parameters, options);
-            //var result = await dialog.Result;
-
-            //if (!result.Cancelled)
-            //{
-            //    if ((bool)(result.Data ?? false))
-            //    {
-            //        var httpResponse = await repositoryService.Del($"api/peliculas/{idPelicula}");
-
-            //        if (httpResponse.StatusCode == HttpStatusCode.OK) // Éxito
-            //        {
-            //            snackbar.Add("Estado actualizado.", Severity.Success);
-            //            await UpdateGrid();
-            //        }
-            //        else // Error
-            //        {
-            //            snackbar.Add($"Error: {httpResponse.RequestMessage.ToString()}", Severity.Error);
-            //        }
-            //    }
+            //    snackBar.Add("Eliminar SI");
             //}
+            //else
+            //{
+            //    snackBar.Add("Eliminar NO");
+            //}
+
+            var parameters = new DialogParameters()
+            {
+                { nameof(MessageBoxComponent.Style), MessageBoxComponent.DialogStyle.Question },
+                { nameof(MessageBoxComponent.Title), "Eliminar Libro" },
+                { nameof(MessageBoxComponent.Subtitle1), "¿Confirma la eliminación del registro seleccionado?" },
+                { nameof(MessageBoxComponent.Subtitle2), null },
+                { nameof(MessageBoxComponent.YesText), "Si" },
+                { nameof(MessageBoxComponent.NoText), "No" },
+                { nameof(MessageBoxComponent.CancelText), null },
+            };
+
+            var options = new DialogOptions
+            {
+                CloseButton = false,
+                MaxWidth = MaxWidth.Small,
+                DisableBackdropClick = true
+            };
+
+            var dialog = dialogService.Show<MessageBoxComponent>("Iniciando...", parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                if ((bool)(result.Data ?? false))
+                {
+                    snackBar.Add("Registro eliminado.", Severity.Success);
+                }
+            }
         }
 
         #endregion

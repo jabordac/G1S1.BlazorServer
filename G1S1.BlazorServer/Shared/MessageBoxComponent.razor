@@ -1,0 +1,51 @@
+﻿<MudDialog ClassActions="mt-1 mb-3 mr-4">
+    <TitleContent>
+        <MudText Align="Align.Center" Typo="Typo.h5"><b>@Title</b></MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid Justify="Justify.Center">
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudIcon Icon="@IconDialog" Color="@IconColorDialog" Class="fs-8x" />
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                <MudText Typo="Typo.subtitle1"><b>@Subtitle1</b></MudText>
+            </MudItem>
+            <MudItem xs="12" Class="d-flex justify-center">
+                @if (string.IsNullOrEmpty(@CancelText))
+                {
+                    <MudText Typo="Typo.subtitle2" Class="d-flex justify-center">@Subtitle2</MudText>
+                }
+            </MudItem>
+        </MudGrid>
+
+        @if (!MudDialog.Options.CloseButton ?? false)
+        {
+            <MudDivider DividerType="DividerType.FullWidth" Class="mt-4" />
+        }
+    </DialogContent>
+    <DialogActions>
+        @if (!MudDialog.Options.CloseButton ?? false)
+        {
+            @if (!string.IsNullOrEmpty(@CancelText))
+            {
+                <MudButton Variant="Variant.Outlined" Size="Size.Medium" Class="px-10" Color="Color.Default" OnClick="@OnCancel">
+                    @CancelText
+                </MudButton>
+            }
+
+            @if (!string.IsNullOrEmpty(NoText))
+            {
+                <MudButton Variant="Variant.Outlined" Size="Size.Medium" Class="px-10" Color="Color.Info" DisableElevation="true" OnClick="@OnNot">
+                    @NoText
+                </MudButton>
+            }
+
+            @if (!string.IsNullOrEmpty(YesText))
+            {
+                <MudButton Variant="Variant.Filled" Size="Size.Medium" Class="px-10" Color="Color.Success" DisableElevation="true" OnClick="@OnYes">
+                    @YesText
+                </MudButton>
+            }
+        }
+    </DialogActions>
+</MudDialog>

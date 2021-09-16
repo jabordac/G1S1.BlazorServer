@@ -3,8 +3,7 @@
 <MudLayout>
     <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
         <MudAppBar Elevation="1" Dense="true">
-            <MudFab Icon="@Icons.Material.Filled.Menu" Size="Size.Small" IconSize="Size.Small" OnClick="@ToggleDrawer" Class="mt-auto mb-auto"
-                    Style="background-color: white;" />
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
             <MudAppBarSpacer />
             <MudText Typo="Typo.h6">Books</MudText>
             <MudAppBarSpacer />
@@ -19,7 +18,7 @@
         <MudDrawer @bind-Open="@open" ClipMode="DrawerClipMode.Never" PreserveOpenState="false"
                    Elevation="5" Variant="DrawerVariant.Mini" OpenMiniOnHover="true" Fixed="true">
             <MudDrawerHeader Class="d-flex justify-center">
-                <MudIcon Color="Color.Info" Icon="@Icons.Material.Filled.MovieFilter" Style="font-size: 4em;"></MudIcon>
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
             </MudDrawerHeader>
             <NavMenu />
         </MudDrawer>

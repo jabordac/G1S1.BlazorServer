@@ -27,6 +27,7 @@ a, .btn-link {
 }
 
 .validation-message {
+    margin-top: 15px;
     color: red;
 }
 
@@ -48,3 +49,7 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.fs-8x {
+    font-size: 8rem;
+}
